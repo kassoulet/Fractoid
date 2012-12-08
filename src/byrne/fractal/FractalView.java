@@ -26,6 +26,7 @@ import android.view.MotionEvent;
 import android.content.Context;
 import android.os.AsyncTask.Status;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.content.res.Resources;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -357,17 +358,10 @@ public class FractalView extends View implements MultiTouchObjectCanvas<FractalV
   
   public void setTime(long t) {
     long time = t / 1000;  
-    String seconds = Integer.toString((int)(time % 60));  
-    String minutes = Integer.toString((int)(time / 60));  
-    for (int i = 0; i < 2; i++) {  
-      if (seconds.length() < 2) {  
-        seconds = "0" + seconds;  
-      }  
-      if (minutes.length() < 2) {  
-        minutes = "0" + minutes;  
-      }
-    }
-    calculationTime = "Time: "+minutes+":"+seconds;
+    long seconds = time % 60;  
+    long minutes = time / 60;  
+    calculationTime = String.format("Time: %d:%02d.%03d", minutes, seconds, t % 1000);
+    Log.i("F", "time: "+t+"ms");
   }
 
   protected void resetCoords() {
@@ -555,7 +549,7 @@ public class FractalView extends View implements MultiTouchObjectCanvas<FractalV
       canvas.drawText(maxIterString,5,yres-5,p);
       
       if (calculationTime != null) {
-        canvas.drawText(calculationTime,xres-140,yres-5,p);
+        canvas.drawText(calculationTime,xres-180,yres-5,p);
       } else {
         Rect total = new Rect(xres-155,yres-30,xres-5,yres-5);
         int pleft = (int)((1-progress)*150);
